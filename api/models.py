@@ -20,7 +20,7 @@ class ProductModel(models.Model):
     product_desc = models.CharField(max_length=100)
     product_qty = models.IntegerField()
     product_price = models.IntegerField()
-    product_img = models.ImageField(upload_to='images/', default="")
+    product_img = models.ImageField(upload_to='images/', default=None)
 
     def __str__(self):
         return self.product_name

@@ -1,32 +1,30 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import UserModel, ProductModel
-from .serializers import UserSerializers, ProductSerializers
+from .models import ProductModel
+from .serializers import ProductSerializers
 
 # Create your views here.
 
-class ProductView(APIView):
+class AddProduct(APIView):
     def post(self, request):
         try:
-            data = request.data
-            serializer = ProductSerializers(data)
-            print(1, serializer.data)
+            serializer = ProductSerializers(data=request.data)
             if serializer.is_valid():
-                print(2, serializer.data)
                 serializer.save()
                 return Response({"status":200,"message": "Product Added", "product":serializer.data})
             else:
-                return Response({"status":404,"message": "Something Went Wrong"})
+                return Response({"status":404,"message": "Something is Wrong"})
+        except Exception as e:
+            return Response({"status":404,"message": "Something Went Wrong", "error":str(e)})
+
+class ProductView(APIView):
+    def get(self, request, pk):
+        try:
+            product = ProductModel.objects.get(id=pk)
+            serializer = ProductSerializers(product)
+            return Response({"status":200,"message": "Fetched Product", "product":serializer.data})
         except:
-            return Response({"status":404,"message": "Something Went Wrong"})
-        
-    # def get(self, request, pk):
-    #     try:
-    #         product = ProductModel.objects.get(id=pk)
-    #         serializer = ProductSerializers(product)
-    #         return Response({"status":200,"message": "Fetched Product", "product":serializer.data})
-    #     except:
-    #         return Response({"status":404,"message": "Item Not Found"})
+            return Response({"status":404,"message": "Item Not Found"})
 
     
     def put(self, request, pk):
