@@ -4,14 +4,13 @@ from .models import ProductModel
 from .serializers import ProductSerializers
 
 # Create your views here.
-
 class AddProduct(APIView):
     def post(self, request):
         try:
             serializer = ProductSerializers(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status":200,"message": "Product Added", "product":serializer.data})
+                return Response({"status":201,"message": "Product Added", "product":serializer.data})
             else:
                 return Response({"status":404,"message": "Something is Wrong"})
         except Exception as e:
@@ -51,8 +50,6 @@ class ProductView(APIView):
         except:
             return Response({"status":404,"message": "Something Went Wrong"})
     
-
-
 
 class AllProducts(APIView):
     def get(self, request):
